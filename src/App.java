@@ -9,7 +9,7 @@ import com.raylib.Raylib.Vector3;
 public class App {
 
     static boolean simulating = true;
-    static boolean waspButtonEnabled=true;    
+    static boolean waspButtonEnabled=true;  
     static float minDistance = 2.0f;
     static float maxDistance = 40.0f;
     static float rotationSpeed = 2.0f;
@@ -60,7 +60,6 @@ public class App {
         Rectangle WaspButton  = new Rectangle();
                 WaspButton.height(40).width(100);
                 WaspButton.x(20).y(610);    //assuming this spot is ok?
-
 
         while (!WindowShouldClose()) {
             float deltaTime = GetFrameTime();
@@ -138,6 +137,7 @@ public class App {
                     }
                     //wasp stuff
                         if(flowers!=null){
+                            //flowers.waspCheck();
                             for(EnemyWasp Wasp: flowers.wasps){
                                 Wasp.Draw(camera);
                                 if(simulating){ 
@@ -215,7 +215,8 @@ public class App {
 
         switch (Item) {
             case BeeWorker bee:
-                status = "Object: " + bee.toString() + "\n" + "Name: " + bee.Name + "\n" + "Nector Count: " + Float.toString(bee.getNectorCount());
+                status = "Object: " + bee.toString() + "\n" + "Name: " + bee.Name + "\n"
+                            + "Nector Count: " + Float.toString(bee.getNectorCount())+ "\n"+"Health: "+ Double.toString(bee.getHealth());
                 break;
 
             case Location place:
@@ -236,7 +237,7 @@ public class App {
                 switch (enemy){
                     case EnemyWasp wasp:
                     status=status + "\n"+"Bees Killed: "+Integer.toString(wasp.getBeesKilled())
-                                +"\n"+"Honey Stolen: "+Integer.toString(wasp.getHoneyStolen());
+                                +"\n"+"Honey Stolen: "+Integer.toString(wasp.getHoneyStolen())+"\n"+"Health: "+ Double.toString(wasp.getHealth());
                     break;
                     default:
                         break;

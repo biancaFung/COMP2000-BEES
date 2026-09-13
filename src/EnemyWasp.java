@@ -13,6 +13,7 @@ public class EnemyWasp extends Enemy {
 
     public Texture VisualTexture;
     boolean isAlive;
+    private double health=100;
     Bee target;
     float huntTimer=0f; //time since last target pos update
     float huntInterval = 5f;    //update target pos after 5s
@@ -22,6 +23,8 @@ public class EnemyWasp extends Enemy {
     float fieldSize = Field.fieldSize *5;
     float restSpeed = 0.8f;
 
+    public static final double attack_range = 2.2;    //attack against exterminator
+
     public EnemyWasp(String name, Vector3 spawnPos, Texture texture) {
         super(name, spawnPos, texture);
         texture=VisualTexture;
@@ -30,16 +33,26 @@ public class EnemyWasp extends Enemy {
     
     private void Sting(){
         //check if bee is already dead, or in the hive
-        if(!target.isAlive ||target.InHive){
+        if(!target.isAlive ||target.InHive||target==null){
             state=EnemyState.RESTING;
         }
         else{   //bee is alive --> sting == kill?
-            target.isAlive=false;
+            target.takeDamage(30);
             honeyStolen+=((BeeWorker)target).getNectorCount();
             beesKilled++;
             state=EnemyState.RESTING;
         }
     }
+
+    /*private void Sting(){
+        //check if exterminator is already dead
+        if(!target.isAlive||target==null){
+            state=EnemyState.RESTING;
+        }
+        else{   //bee is alive --> sting == kill?
+            target.takeDamage(15);
+        }
+    }*/
 
     private Vector3 getNewRandPos(){
         float randX = new Random().nextFloat(-fieldSize,fieldSize);
@@ -77,13 +90,19 @@ public class EnemyWasp extends Enemy {
                         target=null;
                         break;
                     }
+                /*for(EnemyExterminator exterminator:Field.exterminators){
+                    if(exterminator.isAlive && inRange(exterminator)){
+                        exterminator.takeDamage(32 * deltaTime);
+                    }
                 }
+                break;*/
+            }
         //update target position - assuming it doesn't update automatically
-                Vector3 offsetPos = new Vector3().y (0.8f).x(target.Position.x()).z(target.Position.z());
+                Vector3 offsetPos = new Vector3().y (0.8f).x(target.getPosition().x()).z(target.getPosition().z());
                 huntTimer+=deltaTime;
                 if (huntTimer>=huntInterval) {
             //update target pos after 5s
-                    offsetPos = new Vector3().y(0.8f).x(target.Position.x()).z(target.Position.z());
+                    offsetPos = new Vector3().y(0.8f).x(target.getPosition().x()).z(target.getPosition().z());
                     huntTimer=0f;
                 }
                 Position = Vector3Lerp(Position, offsetPos, deltaTime * speed);
@@ -104,5 +123,19 @@ public class EnemyWasp extends Enemy {
 
     public int getHoneyStolen(){
         return this.honeyStolen;
+    }
+    public Vector3 getPosition(){
+        return Position;
+    }
+    public final double getHealth() { return health; } 
+    public final void takeDamage(double damage) {
+        isAlive = health > 0;
+        health = Math.max(0, health - damage);
+    }
+
+     private boolean inRange(Object object) {
+        double dx = getPosition().x() - object.getPosition().x();
+        double dz = getPosition().z() - object.getPosition().z();
+        return Math.hypot(dx, dz) <= attack_range;
     }
 }

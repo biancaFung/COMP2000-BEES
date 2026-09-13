@@ -1,5 +1,5 @@
 import com.raylib.Raylib.Texture;
-public class QueenBee extends Bee {
+public class BeeQueen extends Bee {
 
     enum QueenState {
         LAYING,
@@ -11,7 +11,7 @@ public class QueenBee extends Bee {
     float eggTimer = 0f;
     float eggInterval = 5f; //seconds between eggs
 
-    QueenBee (String Name, Hive hive, Texture texture ) {
+    BeeQueen (String Name, Hive hive, Texture texture ) {
         super(Name, hive, texture); //inherets constructor from parent (Bee)
         myHive = hive; 
     }

@@ -16,12 +16,13 @@ public class Bee implements CollisionBox {
     Hive myHive;
     boolean InHive = false;
     boolean isAlive = true;
+    private double health=100;
 
     public Texture VisualTexture;// = LoadTexture("Assets/Bee.png");
 
     public boolean EnabledCollider = true;
 
-    public Vector3 Position = new Vector3();
+    protected Vector3 Position = new Vector3();
 
     Bee(String Name, Hive hive, Texture texture){
         this.Name = Name;
@@ -31,6 +32,15 @@ public class Bee implements CollisionBox {
     Bee(String Name, String Sprite, Hive hive){
         this.Name = Name;
         VisualTexture = LoadTexture(Sprite);
+    }
+
+    public Vector3 getPosition(){
+        return Position;
+    }
+    public final double getHealth() { return health; }  
+    public final void takeDamage(double damage) {
+        isAlive = health > 0;
+        health = Math.max(0, health - damage);
     }
 
     //This is where the live functionallity lives this will be called (hopefully) every frame? i think

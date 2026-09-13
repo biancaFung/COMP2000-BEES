@@ -21,7 +21,7 @@ public class Enemy implements CollisionBox {
     //I also took this from the bee class
     //if its in the base class then it doesn't need to be specified here
     public boolean EnabledCollider = true;
-    public Vector3 Position = new Vector3();
+    protected Vector3 Position = new Vector3();
     public Texture VisualTexture;
 
     //i dont think this one is needed?

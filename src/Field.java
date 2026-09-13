@@ -6,11 +6,13 @@ import static com.raylib.Raylib.LoadTexture;
 
 public class Field extends Location{
     public ArrayList<Flower> flowerfield = new ArrayList<>();
-    public ArrayList<EnemyWasp> wasps = new ArrayList<>();
+    public static ArrayList<EnemyWasp> wasps = new ArrayList<>();
+    public static ArrayList<EnemyExterminator> exterminators = new ArrayList<>();
     public static float fieldSize = 10;
 
     public Texture FlowerTexture = LoadTexture("Assets/flower.png");
     public Texture WaspTexture = LoadTexture("Assets/wasp.png");
+    public Texture ExterminatorTexture = LoadTexture("Assets/exterminator.png");
 
     Field(Vector3 Location, float fieldSize) {
         super("Field", Location);
@@ -27,6 +29,15 @@ public class Field extends Location{
         }
     }
 
+    public void waspCheck(){
+        for(EnemyWasp w : this.wasps){
+            if(w!= null&& !w.isAlive){
+                wasps.remove(w);
+                return;
+            }
+        }
+    }
+
     public void SpawnFlower(){
         Flower newflower = new Flower("tulip", RandomFloorPos(fieldSize), 100,FlowerTexture);
         flowerfield.add(newflower);
@@ -36,6 +47,12 @@ public class Field extends Location{
         float randx = new Random().nextFloat(-fieldSize, fieldSize);
         EnemyWasp newWasp = new EnemyWasp("Gwesped",new Vector3().x(randx).y(2.1f).z(-1f),WaspTexture);
         wasps.add(newWasp);
+    }
+
+    public void spawnExterminator(){
+        float randx = new Random().nextFloat(-fieldSize, fieldSize);
+        EnemyExterminator newExterminator = new EnemyExterminator("Ken",new Vector3().x(randx).y(2.1f).z(-1f),ExterminatorTexture);
+        exterminators.add(newExterminator);
     }
 
     public Vector3 RandomFloorPos(float fieldSize){
